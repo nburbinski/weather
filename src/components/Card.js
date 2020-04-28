@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import regeneratorRuntime from "regenerator-runtime";
 import sun from "../assets/sun.svg";
 import moon from "../assets/moon.svg";
+import Daily from "./Daily";
 
-const WeatherCard = (props) => {
+const WeatherCard = ({ location }) => {
   const [weatherData, setWeatherData] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
 
   const hour = new Date().getHours();
 
@@ -14,34 +16,64 @@ const WeatherCard = (props) => {
 
   useEffect(() => {
     async function getWeather() {
-      const res = await fetch(
-        `https://api.openweathermap.org/data/2.5/weather?q=${props.location}&APPID=57f272961cfeb25141aaf85593add01d`
-      );
-      const data = await res.json();
-      setWeatherData(data);
-      console.log(data);
+      setIsLoading(true);
+      try {
+        const res = await fetch(
+          `https://api.openweathermap.org/data/2.5/weather?q=${location}&APPID=57f272961cfeb25141aaf85593add01d`
+        );
+        const data = await res.json();
+
+        const res2 = await fetch(
+          `https://api.openweathermap.org/data/2.5/onecall?lat=${data.coord.lat}&lon=${data.coord.lon}&appid=57f272961cfeb25141aaf85593add01d`
+        );
+
+        const data2 = await res2.json();
+        console.log(data2);
+
+        setIsLoading(false);
+        setWeatherData({ name: data.name, ...data2 });
+      } catch (error) {
+        console.log(error);
+        console.log("fail");
+        setIsLoading(false);
+        setWeatherData({
+          name: "Error, city not found",
+        });
+      }
     }
     getWeather();
-  }, []);
+  }, [location]);
 
-  if (!weatherData.weather) {
+  if (!weatherData.current || isLoading) {
     return <p>Loading...</p>;
   }
+
   return (
     <div className="weatherCard">
       <h2 className="cardTitle">{weatherData.name}</h2>
       <div>
-        <img src={hour > 18 ? moon : sun} />
         <div>
-          <h4>{kelvinToFarenheit(Number(weatherData.main.temp))}F</h4>
+          <img className="image" src={hour > 17 ? moon : sun} />
+          <p className="description">
+            {weatherData.current.weather[0].description}
+          </p>
+        </div>
+
+        <div>
+          <h4>{kelvinToFarenheit(Number(weatherData.current.temp))}°F</h4>
           <p>
-            Feels like {kelvinToFarenheit(Number(weatherData.main.feels_like))}
+            Feels like{" "}
+            {kelvinToFarenheit(Number(weatherData.current.feels_like))}
           </p>
           <div className="extra">
-            <p>Humidity {weatherData.main.humidity}</p>
-            <p> Wind Speed {weatherData.wind.speed}</p>
+            <p>Humidity {weatherData.current.humidity}</p>
           </div>
         </div>
+      </div>
+      <div className="dailyList">
+        {weatherData.daily.map((daily) => (
+          <Daily daily={daily} key={daily.dt} />
+        ))}
       </div>
     </div>
   );

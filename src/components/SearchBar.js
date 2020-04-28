@@ -1,11 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 
-const SearchBar = ({ location, setLocation }) => {
+const SearchBar = ({ setLocation }) => {
+  const [search, setSearch] = useState("orlando");
+
   return (
     <div className="search">
       <input
-        value={location}
-        onChange={({ target }) => setLocation(target.value)}
+        value={search}
+        onChange={({ target }) => setSearch(target.value)}
+        onKeyPress={(event) =>
+          event.key === "Enter" ? setLocation(search) : ""
+        }
       ></input>
     </div>
   );
