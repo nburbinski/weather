@@ -18,7 +18,7 @@ body {
 .weatherCard {
   background: #fff;
   margin: 0 auto;
-  padding: 2.5em;
+  padding: 1.5em 2.5em 2.5em 2.5em;
   width: 50%;
   -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.12), 0 2px 2px rgba(0, 0, 0, 0.12), 0 4px 4px rgba(0, 0, 0, 0.12), 0 8px 8px rgba(0, 0, 0, 0.12), 0 16px 16px rgba(0, 0, 0, 0.12);
           box-shadow: 0 1px 1px rgba(0, 0, 0, 0.12), 0 2px 2px rgba(0, 0, 0, 0.12), 0 4px 4px rgba(0, 0, 0, 0.12), 0 8px 8px rgba(0, 0, 0, 0.12), 0 16px 16px rgba(0, 0, 0, 0.12);
@@ -34,6 +34,18 @@ body {
 .weatherCard * {
   background: #fff;
   color: #000;
+}
+
+.weatherCard .image {
+  width: 100%;
+}
+
+.weatherCard p {
+  margin-top: 0;
+}
+
+.weatherCard .description {
+  text-transform: capitalize;
 }
 
 .weatherCard .cardTitle {
@@ -69,6 +81,34 @@ body {
 .weatherCard h4 {
   margin: 0 0;
   font-size: 4em;
+}
+
+.dailyList {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+}
+
+.dailyList .daily {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+}
+
+.dailyList .dailyTemp {
+  font-weight: bolder;
 }
 
 .search {
